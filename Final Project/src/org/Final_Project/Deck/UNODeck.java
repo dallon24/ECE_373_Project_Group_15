@@ -94,16 +94,16 @@ public class UNODeck extends Deck{   //subclass of Deck
 			UNODeck.add(new UNOCard("Reverse", "Blue", 20));
 			UNODeck.add(new UNOCard("Reverse", "Green", 20));
 			
-			UNODeck.add(new UNOCard("Draw Two", "Red", 20));
-			UNODeck.add(new UNOCard("Draw Two", "Yellow", 20));  // Draw Two UNOCards
-			UNODeck.add(new UNOCard("Draw Two", "Blue", 20));
-			UNODeck.add(new UNOCard("Draw Two", "Green", 20));
+			UNODeck.add(new UNOCard("Draw_Two", "Red", 20));
+			UNODeck.add(new UNOCard("Draw_Two", "Yellow", 20));  // Draw Two UNOCards
+			UNODeck.add(new UNOCard("Draw_Two", "Blue", 20));
+			UNODeck.add(new UNOCard("Draw_Two", "Green", 20));
 		}
 		
 		//Creating the Wild and Draw Four Wild UNOCards => There are four of each UNOCard
 		for (int i = 0; i < 4; i++) {
 			UNODeck.add(new UNOCard("Wild", "None", 50));
-			UNODeck.add(new UNOCard("Wild Draw Four", "None", 50));
+			UNODeck.add(new UNOCard("Wild_Draw_Four", "None", 50));
 		}
 		
 		//Check for error in creating Deck
@@ -111,7 +111,7 @@ public class UNODeck extends Deck{   //subclass of Deck
 			System.out.println("Error in creating UNODeck");
 		}
 		else {
-			//Shuffle();
+			Shuffle();
 		}
 	}
 	
@@ -141,8 +141,11 @@ public class UNODeck extends Deck{   //subclass of Deck
 				OutOfUNOCardsReShuffle();
 			}
 			
-			unoDiscardPile.add(UNODeck.get(0));
 			return UNODeck.remove(0);
+		}
+		
+		public void addUNOCardToDiscardPile(UNOCard card) {
+			unoDiscardPile.add(card);
 		}
 		
 		//Checks if the UNODeck is empty
@@ -160,7 +163,7 @@ public class UNODeck extends Deck{   //subclass of Deck
 		
 		public void PrintUNODeck(ArrayList<UNOCard> deck) {
 			for(UNOCard c : deck) {
-				if (c.getColor() == "None") {
+				if (c.getColor().equals("None")) {
 					System.out.println(c.getName());
 				}
 				else {
