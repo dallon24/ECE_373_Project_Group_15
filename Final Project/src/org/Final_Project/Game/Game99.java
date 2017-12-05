@@ -1,42 +1,32 @@
 package org.Final_Project.Game;
 
-import org.Final_Project.Deck.Deck;
+import org.Final_Project.Deck.*;
 import org.Final_Project.Deck.Card;
 import org.Final_Project.Players.Player;
 
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-public class Game99 extends Game{
+public class Game99 {
 
 	//Field for Game 99
 	private Deck Game99Deck;
 	private int pointTotal;
-	private ArrayList<Card> discardPile;
 	private int specialDecision;
 	private int specialValue;
-	private Player currentPlayer;
-	private Player nextPlayer;;
-	private Player winner;
+	private ArrayList<Player> player99;
+	private Player currentPlayerToPlay;
+	private int currentPlayerToPlayIndex;
 
 	//Constructor
-	public Game99() {
+	public Game99(ArrayList<Player> players) {
 		Game99Deck = new Deck();
 		pointTotal = 0;
 		specialDecision = 0;
 		specialValue = 0;
-		discardPile = new ArrayList<Card>();
-		currentPlayer = new Player();
-		nextPlayer = new Player();
-		winner = new Player();
+		player99 = new ArrayList<Player>();
+		player99.addAll(players);
+		currentPlayerToPlay = new Player();
+		currentPlayerToPlayIndex = 0;
 	}
 	
 	//Methods for Game99
@@ -60,19 +50,45 @@ public class Game99 extends Game{
     public int getPointsTotal() {
     	return pointTotal;
     }
+    public Deck get99Deck() {
+		return Game99Deck;
+	}
+    public ArrayList<Player> getPlayerList(){
+		return player99;
+	}
+	
+	public Player getCurrentPlayerToPlay() {
+		return currentPlayerToPlay;
+	}
+	
+	public void setCurrentPlayerToPlay(Player player) {
+		currentPlayerToPlay = player;
+	}
 	
 	// Deals 5 cards to each player to start the game
 	public void DealCards() {  
 		for (int i = 1; i <= 5; i++) {
-			for (int j = 0; j < players.size(); i++) {
-				players.get(j).getPlayersHand().add(Game99Deck.DealACard());
+			for (int j = 0; j < player99.size(); j++) {
+				player99.get(j).getPlayersHand().add(Game99Deck.DealACard());
 			}
 		}
+		//player99.get(0).getPlayersHand().add(new Card("Ace", "Spade", 1));
+		//Game99Deck.addCardToDiscardPile(Game99Deck.DealACard());
 	}
+	
+	public void PlayerToPlayNext() { // Determines the next player to play
+	
+		currentPlayerToPlayIndex++;
+		if (currentPlayerToPlayIndex >= player99.size()) {
+			currentPlayerToPlayIndex = 0;
+		}
+		currentPlayerToPlay = player99.get(currentPlayerToPlayIndex); // Next Player to play a card
+	}
+	
 	
 	//Checks if pointTotal is 99 or not
 	public boolean CheckPointTotal() { 
-		if (this.pointTotal == 99) {
+		if (this.pointTotal > 99) {
 			return true;
 		}
 		else {
@@ -82,19 +98,19 @@ public class Game99 extends Game{
 	
 	//Special cards function/decision (A, 10, J, Q, K)
 	public int SpecialCardDecision(Card aCard) {
-		if (aCard.getName() == "Jake") {
+		if (aCard.getName().equals("Jack")) {
 			specialDecision = 11;
 		}
-		else if (aCard.getName() == "Queen") {
+		else if (aCard.getName().equals("Queen")) {
 			specialDecision = 12;
 		}
-		else if (aCard.getName() == "King") {
+		else if (aCard.getName().equals("King")) {
 			specialDecision = 13;
 		}
-		else if (aCard.getName() == "Ace" && aCard.getSuit() != "Spade") {
+		else if (aCard.getName().equals("Ace") && !(aCard.getSuit().equals("Spade"))) {
 			specialDecision = 1;
 		}
-		else if (aCard.getName() == "Ace" && aCard.getSuit() == "Spade") {
+		else if (aCard.getName().equals("Ace") && aCard.getSuit().equals("Spade")) {
 			specialDecision = 111;
 		}
 		else if (aCard.getValue() == 10) {
@@ -108,7 +124,7 @@ public class Game99 extends Game{
 
 	//calculate the current points total
     public void CalculatePointsTotal(Card aCard){
-    	discardPile.add(aCard);		//add the played card to discardPile
+    	Game99Deck.addCardToDiscardPile(aCard);		//add the played card to discardPile
     	
     	if(specialDecision == 13) {
     		this.pointTotal = 99;
@@ -116,129 +132,20 @@ public class Game99 extends Game{
     	else if(specialDecision == 11) {
     		this.pointTotal += 0;
     	}
-    	else if(specialDecision != 0) {
-    		this.pointTotal += specialValue;
-    	}
     	else if(specialDecision == 111) {
     		this.pointTotal = 0;
+    	}
+    	else if(specialDecision != 0) {
+    		this.pointTotal += specialValue;
     	}
     	else {
     		this.pointTotal += aCard.getValue();
     	}
-    	currentPlayer.getPlayersHand().add(Game99Deck.DealACard());
+    	
+    	if(this.pointTotal < 0) {
+    		this.pointTotal = 0;
+    	}
+    	player99.get(currentPlayerToPlayIndex).getPlayersHand().add(Game99Deck.DealACard());
     }
     
-    // Setter and getter for players
-    public void setCurrentlayer(Player cp) {
-		currentPlayer = cp;
-	}
-	public Player getcurrentPlayer() {
-		return currentPlayer;
-	}
-    
-	public void setNextPlayer(Player np) {
-		nextPlayer = np;
-	}
-	public Player getnextPlayer() {
-		return nextPlayer;
-	}
-    
-	public void setWinner(Player winner) {
-		this.winner = winner;
-	}
-	public Player getWinner() {
-		return winner;
-	}
-	
-	// Creating window to ask user for the Special Card decision
-	public void SpecialCardValue() { 
-		//Creating window
-		JFrame window = new JFrame("Special Cards");
-		window.setSize(500, 300);
-		window.setLayout(new FlowLayout());
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setLocationRelativeTo(null);
-		
-		// Creating name field
-		JLabel cardMessage = new JLabel("Choose the value of Special Card:");
-		
-		// Creating value buttons
-		JButton plus20 = new JButton("+20");
-		JButton minus20 = new JButton("-20");
-		JButton plus10 = new JButton("+10");
-		JButton minus10 = new JButton("-10");
-		JButton plus1 = new JButton("+1");
-		JButton minus1 = new JButton("-1");
-		
-		//Creating panels to add all objects to
-		JPanel panel1 = new JPanel(new GridLayout(1,1)); 
-		panel1.add(cardMessage);
-
-		JPanel panel2 = new JPanel(new GridLayout(3,2));
-		panel2.add(plus20);
-		panel2.add(minus20);
-		panel2.add(plus10);
-		panel2.add(minus10);
-		panel2.add(plus1);
-		panel2.add(minus1);
-		
-		//Adding panel of objects to the JFrame window
-		window.add(panel1);
-		window.add(panel2);
-		window.setVisible(true); 
-		
-		if(specialDecision == 12) {
-		//Event handler for +20
-		plus20.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = 20;
-				window.setVisible(false);
-			}
-		});
-		//Event Handler for -20
-		minus20.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = -20;
-				window.setVisible(false);
-			}
-		});
-		}
-		
-		if(specialDecision == 10) {
-		//Event Handler for +10
-		plus10.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = 10;
-				window.setVisible(false);
-			}
-		});		
-		//Event Handler for -10
-		minus10.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = -10;
-				window.setVisible(false);
-			}
-		});
-		}
-		
-		if(specialDecision == 1) {
-		//Event Handler for +1
-		plus1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = 1;
-				window.setVisible(false);
-			}
-		});
-		//Event Handler for -1
-		minus1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				specialValue = -1;
-				window.setVisible(false);
-			}
-		});
-		}
-				
-	}
-
-	
 }

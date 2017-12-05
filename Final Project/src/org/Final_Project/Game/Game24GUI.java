@@ -3,18 +3,11 @@ package org.Final_Project.Game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.script.ScriptException;
 import javax.swing.*;
@@ -28,6 +21,7 @@ import org.Final_Project.Players.Player24;
 //	
 //
 //}
+@SuppressWarnings("serial")
 public class Game24GUI extends JFrame {
 	public final int WIDTH24 = 960;
 	public final int HEIGHT24 = WIDTH24*9/12;
@@ -81,6 +75,7 @@ public class Game24GUI extends JFrame {
 		play24Button.setBackground(Color.BLACK);
 		play24Button.setFont(new Font("Serif", Font.BOLD, 24));
 		
+		
 		instruction24Button = new JButton("Instructions"); // Instructions button that will open a window that will show all the instructions
 		instruction24Button.setBackground(Color.BLACK);
 		instruction24Button.setFont(new Font("Serif", Font.BOLD, 24));
@@ -118,6 +113,9 @@ public class Game24GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				dispose();
+				
+				Game mainMenu = new Game();  // Restart Classic Card Games Main Menu GUI
+				mainMenu.MainMenuGUI();
 			}
 		});
 
