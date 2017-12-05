@@ -28,10 +28,11 @@ The player next to you will have to pick up two cards if you play one of these.
 Lastly, you will come across cards called Wild Draw 4. 
 This means that, if played, the player gets to change the color ... and the player next to him has to pick up four cards.
 
-When you have one card left, you must yell "UNO" (meaning one).
- If you don't call "Uno" and you get cought by another player, you must pick up two cards from the draw pile.
-  Once a player has no cards left, the hand is over. Points are scored and you start over again.
-
+**********************************************************************************************************************************
+ IMPORTANT => When you have one card left, you must click the "Call UNO" butten when the pop-up window is displayed on the screen.
+ You will have three seconds to click the "Call UNO" button before the window disapears. If you do not manage to click the button before 
+ it disapears... you will recieve two cards.
+***********************************************************************************************************************************
 Scoring
 
 If you win the game, you give yourself points according to the number and type of cards left in opponents' hands. 

@@ -1,0 +1,23 @@
+Objective: Keep the point total at or less than 99.
+
+Game Start:
+1. Players receive 5 cards from the dealer.
+2. As the play goes, current player plays a card.
+3. The point total starts at zero and each card adds its face value in points (e.g., a 5 is worth five points), 
+except for certain cards that have special values or meanings.
+
+Note: The point total cannot get below zero. 
+If player plays a special card then make a subtraction decision, the lowest point total can get after the played is zero.
+
+Special Cards:
+King - unconditionally takes the point total to 99
+Queen - either adds 20 or subtract 20 from the total
+Jack - Pass
+10 - either adds 10 or subtract 10 from the total
+Ace (Heart, Club, Diamond) - either adds 1 or subtract 1 from the total 
+Spade Ace - take point total back to Zero
+
+4. Player will get a replacement card after each card is played.
+5. If player plays a card then the point total exceeds 99, that player loses the game and game keeps playing with the remaining players.
+6. Game keeps going until only on player left. That Player becomes winner!
+
