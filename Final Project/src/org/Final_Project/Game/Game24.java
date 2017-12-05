@@ -35,61 +35,14 @@ public class Game24 {
 		players24 = new ArrayList<Player24>();
 		hotPlayer = new HotPlayer24();
 	}
-	public boolean checkEquation(String equation) {
-		equation = equation.replaceAll("[()]", "");
-		String [] split = equation.split("\\s+");
 
-		//int a, b, c, d;
-		String opAB, opBC, opCD;
-		if (split.length == 7) {
-			//int 1
-//			a = Integer.parseInt(split[0]);
-//			currentCardValues.add(a);
-			//operation 1
-			opAB = split[1];
-			currentOperations.add(opAB);
-			//int 2
-//			b = Integer.parseInt(split[2]);
-//			currentCardValues.add(b);
-			//operation 2
-			opBC = split[3];
-			currentOperations.add(opBC);
-			//int 3
-//			c = Integer.parseInt(split[4]);
-//			currentCardValues.add(c);
-			//operation 3
-			opCD = split[5];
-			currentOperations.add(opCD);
-			//int 4
-//			d = Integer.parseInt(split[6]);
-//			currentCardValues.add(d);
-//			System.out.println(opAB + opBC + opCD);
-//			System.out.println(currentOperations.size());
-			
-			printOperations(currentOperations);
-//			printCardValues(currentCardValues);
-			
-			if (!checkOperation(opAB) || !checkOperation(opBC) || !checkOperation(opCD)) {
-				System.out.println("Invalid operation");
-				currentOperations.clear();
-				currentCardValues.clear();
-				System.out.println(currentOperations.size() + " " + currentCardValues.size());
-				return false;
-			}
-		}
-		else {
-			System.out.println("too many or not enough commands");
-			return false;
-		}
-		return true;
-	}
 
 	public boolean check24(String equation) throws ScriptException {
 		//"a + b + c + d" ?= 24
-		if (!checkEquation(equation)) {
-			return false;
-		}
-		else {
+//		if (!checkEquation(equation)) {
+//			return false;
+//		}
+//		else {
 			Object result = calculateEquation(equation);
 			if (!checkObject(result)) {
 				System.out.println("Error: the result of the expression is not an integer, result is " + result);
@@ -99,7 +52,7 @@ public class Game24 {
 				System.out.println("Error: the expression does not equal 24, result is " + result);
 				return false;
 			}
-		}
+//		}
 		System.out.println("You made 24!");
 		return true;
 	}
@@ -163,6 +116,7 @@ public class Game24 {
 			
 			}
 		}
+		players24.get(0).setPlayerScore(points);
 		return points;
 	}
 
@@ -207,17 +161,15 @@ public class Game24 {
 		System.out.println(
 				"Four cards and a list of operations will be displayed. The goal is to make the number 24 with these 4 cards using 3 operations (parentheses allowed.");
 		System.out.println(
-				"For example, (4 + 2) * 2 + 12 = 24. Aces shall have the value of 1, Jacks 11, Queens 12, and Kings 13. There shall be 4 players to this game and each player will be assigned the buttons.");
-		System.out.println("Player 1: Q \nPlayer 2: C \nPlayer 3: N \nPlayer 4: O");
+				"For example, (4 + 2) * 2 + 12 = 24. Aces shall have the value of 1, Jacks 11, Queens 12, and Kings 13.");
 		System.out.println(
 				"When a player has come up with the solution, the player can press their respective button to make 24");
-		System.out.println("After a player triggers their respective button, a 20 second timer will count down for the player to make 24");
 		System.out.println(
 				"The player will click the card/operation buttons in the order which they want the equation to be. For helpful guidance on what has been entered so far");
-		System.out.println("a text will update as the player presses every card/operation. If the player fails to make 24 within the 20 seconds, they will be locked out of their trigger button for the remainder of that turn");
-		System.out.println("once that turn is completed, any locked out players will be unlocked for the following turn");
-		System.out.println("If the player makes 24 within the 20 seconds, points will be calculated and added to the player that successfully solved for 24");
-		System.out.println("The game ends after the entire deck is cycled through, or when a player manually clicks the end game button.");
+		System.out.println("a text will update as the player presses every card/operation.");
+		System.out.println("If the player makes 24, points will be calculated and added to the player that successfully solved for 24");
+		System.out.println("add and subtract are 10 pts, multiply and divide are 20 pts, and exponentiate and square root are 40 pts");
+		System.out.println("The game ends after the entire deck is cycled through, or when the player manually clicks the end game button.");
 	}
 	
 	
