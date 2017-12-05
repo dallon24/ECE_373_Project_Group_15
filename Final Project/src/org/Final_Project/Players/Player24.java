@@ -1,6 +1,6 @@
 package org.Final_Project.Players;
 
-public class Player24 extends Player {
+public class Player24 extends Player{
 	private boolean turn;
 	private int score;
 	
