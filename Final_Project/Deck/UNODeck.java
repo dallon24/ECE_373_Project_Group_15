@@ -158,7 +158,7 @@ public class UNODeck extends Deck{   //subclass of Deck
 			System.out.println("Out of Cards! Need to Reshuffle.");
 			UNODeck.addAll(unoDiscardPile);
 			unoDiscardPile.clear();
-			Shuffle();
+			UNODeckShuffle();
 		}
 		
 		public void PrintUNODeck(ArrayList<UNOCard> deck) {
