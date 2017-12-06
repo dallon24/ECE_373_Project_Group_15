@@ -111,7 +111,7 @@ public class UNODeck extends Deck{   //subclass of Deck
 			System.out.println("Error in creating UNODeck");
 		}
 		else {
-			Shuffle();
+			UNODeckShuffle();
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class UNODeck extends Deck{   //subclass of Deck
 	}
 	
 	//Shuffles a UNODeck. Having a Shuffle Factor of "1" gives a good shuffled deck, but we can increase this to have a more shuffled deck
-		public void Shuffle() {
+		public void UNODeckShuffle() {
 			int shuffleFactor = 1;
 			for (int i = 0; i < (shuffleFactor*UNODeck.size()); i++) {
 				int x = rand.nextInt(UNODeck.size());

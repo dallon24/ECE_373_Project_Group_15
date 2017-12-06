@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.Timer;
 
 import org.Final_Project.Deck.UNOCard;
 import org.Final_Project.Players.UNOPlayer;
@@ -97,7 +97,10 @@ public class UNOGUI extends JFrame{
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				dispose();
+				dispose();  // Close UNO menu GUI
+				
+				Game mainMenu = new Game();  // Restart Classic Card Games Main Menu GUI
+				mainMenu.MainMenuGUI();
 			}
 		});
 		
@@ -450,10 +453,8 @@ public class UNOGUI extends JFrame{
 					 // Checking if the player only had one card. If he/she does then the call UNO window will be displayed
 					// and the must call uno in three seconds or else they will recieve two cards
 					if (game.getCurrentPlayerToPlay().getUNOPlayersHand().size() == 1) {   
-							
-						if (cardName.equals("Wild") || cardName.equals("Wild_Draw_Four")) {
-							WildIsPlayedAskUserForColor();
-						}
+							gameWindow.dispose();
+							callUNOWindow(cardPickedByPlayer);
 					}
 					
 					else if (game.getCurrentPlayerToPlay().getUNOPlayersHand().size() == 0) {    // Checking if the player dealt his/her last card
@@ -463,6 +464,7 @@ public class UNOGUI extends JFrame{
 						if (game.getCurrentPlayerToPlay().getPlayerScore() > 500) {  // GAME OVER!!!!!!!!!!!!!!
 							gameWindow.dispose();
 							gameOverShowPlayerWhoWon(game.getCurrentPlayerToPlay());
+							
 						}
 						
 						for (UNOPlayer player : game.getPlayerList()) {  //getting rid of all the cards in the players hands to get ready for the new hand
@@ -474,14 +476,17 @@ public class UNOGUI extends JFrame{
 						createGameWindow();                      // LET"S GO!!!!!!!
 					}
 					
-					game.PlayerToPlayNext(cardPickedByPlayer);  //Finds who the next player to play a card should be
-	
-					if (cardName.equals("Wild") || cardName.equals("Wild_Draw_Four") && game.getCurrentPlayerToPlay().getUNOPlayersHand().size() != 1) {
-						WildIsPlayedAskUserForColor();
+					else if (cardName.equals("Wild") || cardName.equals("Wild_Draw_Four") && game.getCurrentPlayerToPlay().getUNOPlayersHand().size() != 1) {
+						gameWindow.dispose();
+						WildIsPlayedAskUserForColor(cardPickedByPlayer);
 					}
+					
 					else {
+					gameWindow.dispose();
+					game.PlayerToPlayNext(cardPickedByPlayer);  //Finds who the next player to play a card should be
 					createGameWindow();
 					}
+		
 				}
 				else {
 					invalidCardPlayMessageWindow();
@@ -513,11 +518,6 @@ public class UNOGUI extends JFrame{
 		}
 		
 		
-		JButton callUNOButton = new JButton("Call UNO");
-		callUNOButton.addActionListener(listener);
-		callUNOButton.setName("Call UNO");
-		playerScorePanel.add(callUNOButton);
-		
 		JPanel deckPanel = new JPanel(new GridLayout(1,4));   // Holding the last card put on top of the discard pile
 		deckPanel.setBackground(Color.DARK_GRAY);
 	
@@ -529,7 +529,7 @@ public class UNOGUI extends JFrame{
 			deckPanel.add(lastCardPlayedPicture);
 			}
 			else {
-				WildIsPlayedAskUserForColor();
+				WildIsPlayedAskUserForColor(game.getUNODeck().getUNODiscardPile().get(game.getUNODeck().getUNODiscardPile().size() - 1));
 				JButton lastCardPlayedPicture = new JButton(new ImageIcon(new ImageIcon("UNO_Card_Pictures\\" + game.getUNODeck().getUNODiscardPile().get(game.getUNODeck().getUNODiscardPile().size() - 1).getName() +
 						".png").getImage().getScaledInstance(250,330,Image.SCALE_SMOOTH)));
 				deckPanel.add(lastCardPlayedPicture);
@@ -580,7 +580,7 @@ public class UNOGUI extends JFrame{
 	
 	
 	// Creating window to ask user for the new color due to wild card being played
-	public void WildIsPlayedAskUserForColor() { 
+	public void WildIsPlayedAskUserForColor(UNOCard cardPickedByPlayer) { 
 		//Creating window
 		JFrame window = new JFrame("Wild Card Was Played");
 		window.setSize(600, 125);
@@ -597,6 +597,7 @@ public class UNOGUI extends JFrame{
 				JButton btn = (JButton) e.getSource();
 				game.setCurrentTurnColor(btn.getText());
 				window.dispose();
+				game.PlayerToPlayNext(cardPickedByPlayer);  //Finds who the next player to play a card should be
 				createGameWindow();
 			}
 		};
@@ -628,15 +629,56 @@ public class UNOGUI extends JFrame{
 				
 	}
 	
-
-	
-	//	int delay = 10000; //milliseconds
-	//	Timer unoTimer = new Timer(delay, listener);
-	//	unoTimer.setRepeats(false);
-	//	unoTimer.setActionCommand("Timer");
-	//	unoTimer.start();
+	public void callUNOWindow(UNOCard cardPickedByPlayer) {
+		JFrame window = new JFrame("Call UNO");
+		window.setSize(600, 150);
+		window.setLayout(new FlowLayout());
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setLocationRelativeTo(null);
 		
-
+		JLabel text = new JLabel("<html>You have three seconds to call UNO.... Hurry!</html>");
+		JButton callUNOButton = new JButton("CALL UNO");
+		JPanel panel1 = new JPanel(new GridLayout(2,1));
+		JPanel panel2 = new JPanel();
+		
+		panel1.add(text);
+		panel2.add(callUNOButton);
+		panel1.add(panel2);
+		
+		window.add(panel1);
+		window.setVisible(true);
+		
+		int timeToCallUNO = 3000;
+		ActionListener taskPerformer = new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				((Timer) event.getSource()).stop();
+				window.dispose();
+				game.getCurrentPlayerToPlay().addToUNOPlayersHand(game.getUNODeck().DealAUNOCard());  // Deal Two Cards because user did not call UNO
+				game.getCurrentPlayerToPlay().addToUNOPlayersHand(game.getUNODeck().DealAUNOCard());
+				game.PlayerToPlayNext(cardPickedByPlayer);
+				createGameWindow();
+			}
+		};
+		Timer unoTimer = new Timer(timeToCallUNO, taskPerformer);
+		unoTimer.start();
+		
+		callUNOButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				unoTimer.stop();
+				game.getCurrentPlayerToPlay().setUserCallUNO(true);
+				window.dispose();
+				
+				if (cardPickedByPlayer.getName().equals("Wild") || cardPickedByPlayer.getName().equals("Wild_Draw_Four")) {
+					WildIsPlayedAskUserForColor(cardPickedByPlayer);
+				}
+				else {
+					game.PlayerToPlayNext(cardPickedByPlayer);
+					createGameWindow();
+				}
+			}
+		});
+	}
+		
 	
 	//Creating a window to display the game is over and what player won the game
 	public void gameOverShowPlayerWhoWon(UNOPlayer winner) {  
@@ -652,16 +694,28 @@ public class UNOGUI extends JFrame{
 		text.setForeground(Color.RED);
 		text.setBackground(Color.DARK_GRAY);
 		
-		JPanel panel = new JPanel(new GridLayout(2,1));
+		JButton okButton = new JButton("Ok");
+		
+		JPanel panel = new JPanel(new GridLayout(3,1));
 		panel.setBackground(Color.BLACK);
 		panel.add(pictureLabel);
 		panel.add(text);
+		panel.add(okButton);
 		
 		window.add(panel);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLocationRelativeTo(null); // Positioning the JFrame and opening the window
 		window.setVisible(true);
+		
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				window.setVisible(false);
+
+				@SuppressWarnings("unused")
+				UNOGUI game = new UNOGUI("UNO"); //return back to UNO main menu GUI to start a new game or exit back to main menu GUI
+			}
+		});
 		
 		return;
 		

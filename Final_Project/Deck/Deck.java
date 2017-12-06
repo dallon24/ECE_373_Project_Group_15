@@ -104,9 +104,9 @@ public class Deck {
 		}
 		else {
 			//TODO: uncomment for testing
-//			PrintDeck(cardPile);
-//			Shuffle();
-//			PrintDeck(cardPile);
+			//PrintDeck(cardPile);
+			Shuffle();
+			//PrintDeck(cardPile);
 		}
 		
 	}
@@ -135,11 +135,15 @@ public class Deck {
 	
 	//Deals a card from the Deck
 	public Card DealACard() {
-		if (isEmpty()) {
+		if (cardPile.size() == 0) {
 			OutOfCardsReShuffle();
 		}
-		discardPile.add(cardPile.get(0));
+		addCardToDiscardPile(cardPile.get(0));
 		return cardPile.remove(0);
+	}
+	
+	public void addCardToDiscardPile(Card c) {
+		discardPile.add(c);
 	}
 	
 	//Checks if the Deck is empty
