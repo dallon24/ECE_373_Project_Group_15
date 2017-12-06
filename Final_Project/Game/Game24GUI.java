@@ -17,10 +17,6 @@ import org.Final_Project.Players.Player24;
 
 
 
-//public class Game24GUI extends JFrame implements Serializable{
-//	
-//
-//}
 @SuppressWarnings("serial")
 public class Game24GUI extends JFrame {
 	public final int WIDTH24 = 960;
@@ -29,7 +25,6 @@ public class Game24GUI extends JFrame {
 	private JButton instruction24Button;
 	private JButton exit24Button;
 	private Game24 game24;
-	String equation = "";
 	StringBuilder equationv2 = new StringBuilder();
 	private boolean round = false;
 	boolean cardOp = false;
@@ -199,8 +194,9 @@ public class Game24GUI extends JFrame {
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setLocationRelativeTo(null);
 		
-		
+		//card panel
 		JPanel cardPanel = new JPanel(new GridLayout(1, 4));
+		//redeal
 		if (!round) {
 		a = game24.getGame24Deck().DealACard();
 		b = game24.getGame24Deck().DealACard();
@@ -209,7 +205,7 @@ public class Game24GUI extends JFrame {
 		round = true;
 		}
 
-		
+		//deal 4 cards
 		JButton buttonA = new JButton(new ImageIcon(new ImageIcon("images/" + a.getValue() + a.getSuit() + ".png").getImage().getScaledInstance(WIDTH24/4, HEIGHT24/5, Image.SCALE_SMOOTH)));
 		JButton buttonB = new JButton(new ImageIcon(new ImageIcon("images/" + b.getValue() + b.getSuit() + ".png").getImage().getScaledInstance(WIDTH24/4, HEIGHT24/5, Image.SCALE_SMOOTH)));
 		JButton buttonC = new JButton(new ImageIcon(new ImageIcon("images/" + c.getValue() + c.getSuit() + ".png").getImage().getScaledInstance(WIDTH24/4, HEIGHT24/5, Image.SCALE_SMOOTH)));
@@ -217,9 +213,9 @@ public class Game24GUI extends JFrame {
 		buttonA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!cardOp && !usedA) {
-				//equation.concat(Integer.toString(a.getValue()));
+
 				equationv2.append(a.getValue());
-				//System.out.println(Integer.toString(a.getValue()));
+
 
 				cardOp = true;
 				usedA = true;
@@ -231,10 +227,7 @@ public class Game24GUI extends JFrame {
 				}
 			}
 		});
-		//equation.concat("h");
-		//System.out.println(equation);
-		//equationv2.append("h");
-		//System.out.println(equationv2.toString());
+		
 		buttonB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!cardOp && !usedB) {
@@ -287,6 +280,7 @@ public class Game24GUI extends JFrame {
 		cardPanel.add(buttonD);
 		gameWindow.add(cardPanel);
 		
+		//operations
 		JPanel opPanel = new JPanel(new GridLayout(1, 9));
 		for (String s : game24.getAcceptableOperations()) {
 			JButton op = new JButton(s);
@@ -344,7 +338,7 @@ public class Game24GUI extends JFrame {
 		equationPanel.add(equationString);
 		gameWindow.add(equationPanel);
 		
-		
+		//player panel
 		JPanel playerScorePanel = new JPanel(new GridLayout(1,0));
 		playerScorePanel.setBackground(Color.DARK_GRAY);
 		
@@ -368,6 +362,7 @@ public class Game24GUI extends JFrame {
 
 		gameWindow.add(playerScorePanel);
 		
+		//options panel
 		JPanel options = new JPanel(new GridLayout(2,2));
 		JButton redeal = new JButton("Redeal");
 		JButton restart = new JButton("Restart");
@@ -386,17 +381,23 @@ public class Game24GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			gameWindow.dispose();
 			//game24.
-			play24();
+			//play24();
+			Game24GUI new24 = new Game24GUI("24");
 			}
 		});
 		returnToGameMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//return to main menu
+				gameWindow.dispose();
+				Game game2 = new Game();
+				game.MainMenuGUI();
+				
 			}
 		});
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gameWindow.dispose();
+				System.exit(0);
 			}
 		});
 		options.add(redeal);
@@ -407,38 +408,3 @@ public class Game24GUI extends JFrame {
 		gameWindow.setVisible(true);
 		
 	}
-
-
-  
-
-//    public static void main(String[] args) {
-//    	
-//        //EventQueue.invokeLater(() -> {
-//            Game24GUI ex = new Game24GUI("24");
-          //  ex.setVisible(true);
-        //});
-    }
-//	private class MenuListener implements ActionListener {
-//		public void actionPerformed(ActionEvent e) {
-//			JMenuItem source = (JMenuItem) (e.getSource());
-//
-//			if (source.equals(fileSave)) {
-//				handleFileSave();
-//			} else if (source.equals(fileLoad)) {
-//				handleFileLoad();
-//			} else if (source.equals(fileExit)) {
-//				handleFileExit();
-//			} else if (source.equals(studentsAddCourse)) {
-//				handleAddCourse();
-//			} else if (source.equals(studentsDropCourse)) {
-//				handleDropCourse();
-//			} else if (source.equals(studentsPrintSchedule)) {
-//				handlePrintSchedule();
-//			} else if (source.equals(administratorsPrintAll)) {
-//				handlePrintAll();
-//			}
-//
-//		}
-
-    
-//}
